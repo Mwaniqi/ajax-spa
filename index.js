@@ -6,18 +6,18 @@ var navOffset = nav.offsetTop
 function stickyNav() {
   if (window.pageYOffset > navOffset) {
     nav.classList.add('nav-sticky')
-    header.style.marginBottom = '2rem'
+    // header.style.marginBottom = '2rem'
   } else {
     nav.classList.remove('nav-sticky')
     header.style.marginBottom = '0'
   }
 }
 
-window.onscroll = () => {stickyNav()}
+window.onscroll = () => stickyNav()
 
 // nav toggle
 var navToggle = document.getElementById('nav-toggle')
 
 navToggle.addEventListener('click', function() {
-  nav.classList.toggle('hidden')
+  nav.classList.toggle('show')
 })
