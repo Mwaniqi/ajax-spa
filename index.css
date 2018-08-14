@@ -1,0 +1,227 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  /* sticky footer */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+:root {
+  --text-color: #cccaca;
+  --bg-main: #303030;
+}
+a {
+  text-decoration: none;
+  color: var(--text-color);
+}
+header {
+  background: var(--bg-main);
+  color: var(--text-color);
+  position: relative;
+  padding: 1rem 0;
+  font-size: 3vw;
+}
+header section {
+  padding: 1rem 2rem 1rem 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+h1 {
+  font-size: 5vw;
+  font-family: cursive;
+  margin: 0;
+}
+header p {
+  font-family: cursive;
+  margin: 0;
+}
+.tel-top {
+  color: rgb(240, 192, 105);
+}
+nav {
+  display: none;
+  background-color: var(--bg-main);
+}
+nav a {
+  display: block;
+  padding: .25rem;
+  margin: .25rem 0;
+  text-align: center;
+  transition: color .3s linear;
+}
+nav a:hover {
+  color: #70cffe;
+  transition: color .3s ease-in;
+}
+#nav-toggle {
+  cursor: pointer;
+  position: relative;
+}
+.icon-menu {
+  position: absolute;
+  bottom: -5px;
+  right: 0;
+  opacity: .5;
+  width: 15px;
+  height: 15px;
+  padding-right: 1rem;
+}
+.hidden {
+  display: block;
+  transition: all .5s ease-in-out;
+}
+main {
+  margin-top: 2rem;
+  padding: 2rem 1rem;
+}
+#gallery {
+  width: 100%;
+  margin: 0 auto 2rem auto;
+  display: flex;
+}
+#img1 {
+  background-color: aqua;
+  background-image: url('https://picsum.photos/500/300');
+  animation-delay: .5s;
+}
+#img2 {
+  background-color: #608ed3;
+  background-image: url('https://picsum.photos/400/300');
+  animation-delay: 5s;
+}
+#img3 {
+  background-color: #51b9a3;
+  background-image: url('https://picsum.photos/450/300');
+  animation-delay: 9.5s;
+}
+#img4 {
+  background-color: #c0657d;
+  background-image: url('https://picsum.photos/480/300');
+  /* background-position-y: -10px; */
+  animation-delay: 13.5s;
+}
+.img-item {
+  background-size: cover;
+  /* background-repeat: no-repeat; */
+  background-position: 50% 0;
+  width: 5%;
+  height: 300px;
+  margin: 0 -12px;
+  flex-grow: 1;
+  transition: all .5s cubic-bezier(0.39, 0.58, 0.57, 1);
+  filter: grayscale(100%);
+  animation: filter 8s 1;
+}
+/* .img-item:hover {
+  width: 75%;
+  flex-grow: 2;
+  background-position: 50% 50%;
+  filter: none;
+  transition: all .8s cubic-bezier(0, 0.1, 0.24, 0.99);
+} */
+@keyframes filter {
+ 0% {
+   width: 5%;
+ }
+ 50% {
+   filter: none;
+   width: 90%;
+   background-position-y: 50%;
+ }
+ 100% {
+  filter: grayscale(100%);
+  width: 5%;
+ }
+}
+#testimonial {
+  background-color: var(--text-color);
+  padding: 1rem 0;
+  margin-top: 2rem;
+}
+blockquote {
+  position: relative;
+  box-sizing: border-box;
+  /* padding: .5rem; */
+  margin: 1rem;
+  clear: both;
+}
+.avatar {
+  width: 50px;
+  height: 50px;
+  background-color: #6b7585;
+  border-radius: 5px;
+  float: left;
+  margin: .4rem .5rem 0 0;
+}
+.fa-quote-right {
+  position: absolute;
+  color: #8b8b8b;
+  font-size: 1.5rem;
+  right: 10%;
+}
+footer {
+  color: var(--text-color);
+  background-color: var(--bg-main);
+  padding: 1rem;
+  flex: 1;
+  text-align: center;
+}
+/************************************ 
+  
+media queries
+
+*************************************/
+
+@media (min-width: 37.5rem) {
+  header {
+    font-size: initial;
+  }
+  header section {
+    padding-bottom: 0;
+  }
+  #nav-toggle {
+    display: none;
+  }
+  nav {
+    box-sizing: border-box;
+    text-align: right;
+    padding: 1rem 1.5rem;
+  }
+  nav a {
+    padding: .5rem;
+    font-size: initial;
+  }
+  .nav-sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    opacity: .9;
+    z-index: 2;
+    /* transition: all .3s cubic-bezier(0.39, 0.58, 0.57, 1); */
+  }
+  #gallery {
+    width: 80%;
+    margin: 0 auto 2rem auto;
+    display: flex;
+  }
+  .img-item:hover {
+    width: 60%;
+    flex-grow: 2;
+    filter: none;
+    transition: all 1s cubic-bezier(0.39, 0.58, 0.57, 1);
+  }
+  #about {
+    max-width: 50rem;
+    text-align: center;
+    margin: 0 auto;
+  }
+  #testimonial {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+  }
+}
