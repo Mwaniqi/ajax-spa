@@ -1,23 +1,29 @@
-// sticky nav
 var nav = document.getElementById('navbar')
-var header = nav.parentElement
+var pageHeader = nav.parentElement
 var navOffset = nav.offsetTop
+var navToggle = document.getElementById('nav-toggle')
 
+// .matchMedia to match css media queries
+if (window.matchMedia('(min-width: 37.5rem)').matches) {
+  window.onscroll = () => stickyNav()  
+}
+
+// nav collapse
+if (window.matchMedia('(max-width: 37.5rem)').matches) {
+  pageHeader.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' || e.target.tagName ==='IMG') {
+      nav.classList.toggle('show')    
+    }
+  })
+}
+
+// sticky nav
 function stickyNav() {
   if (window.pageYOffset > navOffset) {
     nav.classList.add('nav-sticky')
-    // header.style.marginBottom = '2rem'
+    // pageHeader.style.marginBottom = '2rem'
   } else {
     nav.classList.remove('nav-sticky')
-    header.style.marginBottom = '0'
+    pageHeader.style.marginBottom = '0'
   }
 }
-
-window.onscroll = () => stickyNav()
-
-// nav toggle
-var navToggle = document.getElementById('nav-toggle')
-
-navToggle.addEventListener('click', function() {
-  nav.classList.toggle('show')
-})
