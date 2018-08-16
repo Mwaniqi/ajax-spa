@@ -85,7 +85,7 @@ main {
 #img1 {
   background-color: aqua;
   background-image: url('https://picsum.photos/500/300');
-  animation-delay: .5s;
+  animation-delay: 1s;
 }
 #img2 {
   background-color: #608ed3;
