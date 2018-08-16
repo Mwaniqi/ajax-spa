@@ -52,7 +52,7 @@ nav a {
   text-align: center;
   transition: color .3s linear;
 }
-nav a:hover {
+nav a:hover, .active {
   color: #70cffe;
   background-color: #202020;
   transition: all .3s ease-in;
