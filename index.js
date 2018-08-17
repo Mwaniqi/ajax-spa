@@ -54,7 +54,7 @@ function loadMain() {
     }
   }
 
-  xhr.open('GET', '/home.html', true)
+  xhr.open('GET', 'home.html', true)
   xhr.send()
 }
 
@@ -69,7 +69,7 @@ function loadTeam() {
     }
   }
 
-  xhr.open('GET', '/team.html', true)
+  xhr.open('GET', 'team.html', true)
   xhr.send()
 }
 
@@ -84,6 +84,6 @@ function loadProducts() {
     }
   }
 
-  xhr.open('GET', '/products.html', true)
+  xhr.open('GET', 'products.html', true)
   xhr.send()
 }
