@@ -76,6 +76,7 @@ nav a:hover, .active {
 }
 main {
   padding: .8rem;
+  flex: 1; /* stretch to push footer down */
 }
 #gallery {
   width: 100%;
@@ -156,7 +157,6 @@ footer {
   color: var(--text-color);
   background-color: var(--bg-main);
   padding: 1rem;
-  flex: 1;
   text-align: center;
 }
 /************************************ 
