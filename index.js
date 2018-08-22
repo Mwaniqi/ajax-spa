@@ -40,50 +40,70 @@ nav.addEventListener('click', function(e) {
 
 // show home on first load
 document.addEventListener('DOMContentLoaded', function() {
-  loadMain()
+  loadHtml('home')
 })
 
-function loadMain() {
+function loadHtml(page) {
   var xhr = new XMLHttpRequest()
+  var url = `${page}.html`
 
-  xhr.onreadystatechange = function() {
-    if (this.readyState === 4 &&
-        this.status === 200) {
-          console.log(this.responseText)
-          main.innerHTML = this.responseText
+  xhr.onload = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      main.innerHTML = this.response
     }
   }
 
-  xhr.open('GET', 'home.html', true)
+  xhr.open('GET', url, true)
   xhr.send()
 }
 
-function loadTeam() {
-  var xhr = new XMLHttpRequest
+function buildTeamHtml(param) {
+  var req = new XMLHttpRequest()
+  var url = `https://jsonplaceholder.typicode.com/${param}`
+  req.open('GET', url, true)
+  req.send()
+  req.onload = function() {
+    if (req.status === 200 && req.readyState === 4) {
+      var response = JSON.parse(req.response)
+      main.innerHTML = ''
+      var div = createEl('div')
+      div.classList.add('team')
+      append(main, div)
 
-  xhr.onreadystatechange = function() {
-    if (this.readyState === 4 &&
-        this.status === 200) {
-          console.log(this.responseText)
-          main.innerHTML = this.responseText
+      response.forEach(function(person) {
+        var ul = createEl('ul')
+        var name = createEl('li')
+        var email = createEl('li')
+        var motto = createEl('li')
+        var phrase = createEl('li')
+        var mottoStr = person.company.bs
+        mottoStr = mottoStr.replace(mottoStr.charAt(0), mottoStr.charAt(0).toUpperCase())
+
+        name.textContent = person.name
+        email.textContent = person.email
+        motto.textContent = mottoStr
+        phrase.textContent = person.company.catchPhrase
+
+        append(div, ul)
+        append(ul, name)
+        append(ul, email)
+        append(ul, motto)
+        append(ul, phrase)
+      })
+    } else {
+      console.log('Error')
     }
   }
 
-  xhr.open('GET', 'team.html', true)
-  xhr.send()
+  req.onerror = function(err) {
+    console.log(err)
+  }
 }
 
-function loadProducts() {
-  var xhr = new XMLHttpRequest
+function createEl(element) {
+  return document.createElement(element)
+}
 
-  xhr.onreadystatechange = function() {
-    if (this.readyState === 4 &&
-        this.status === 200) {
-          console.log(this.responseText)
-          main.innerHTML = this.responseText
-    }
-  }
-
-  xhr.open('GET', 'products.html', true)
-  xhr.send()
+function append(parent, element) {
+  return parent.appendChild(element)
 }

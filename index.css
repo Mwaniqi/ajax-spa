@@ -10,16 +10,16 @@ body {
   min-height: 100vh;
 }
 :root {
-  --text-color: #cccaca;
+  --gray: #cccaca;
   --bg-main: #303030;
 }
 a {
   text-decoration: none;
-  color: var(--text-color);
+  color: var(--gray);
 }
 header {
-  background: var(--bg-main);
-  color: var(--text-color);
+  background: var(--bg-main, #303030);
+  color: var(--gray, #cccaca);
   position: relative;
   padding: .5rem 0;
   font-size: 3vw;
@@ -129,7 +129,7 @@ main {
  }
 }
 #testimonial {
-  background-color: var(--text-color);
+  background-color: var(--gray, #cccaca);
   padding: 1rem 0;
   margin-top: 2rem;
 }
@@ -153,10 +153,22 @@ blockquote {
   font-size: 1.5rem;
   right: 10%;
 }
+/*******************************
+
+team styles
+
+***********************************/
+ul {
+  background-color: var(--gray, #cccaca);
+  padding: .5rem;
+}
+li {
+  list-style: none;
+}
 footer {
-  color: var(--text-color);
-  background-color: var(--bg-main);
-  padding: 1rem;
+  color: var(--gray, #cccaca);
+  background-color: var(--bg-main, #303030);
+  font-size: .9rem;
   text-align: center;
 }
 /************************************ 
