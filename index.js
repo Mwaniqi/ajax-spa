@@ -4,6 +4,7 @@ var navOffset = nav.offsetTop
 var navToggle = document.getElementById('nav-toggle')
 var navLinks = Array.from(nav.children)
 var main = document.getElementById('main')
+var photos, users
 
 // .matchMedia to match css media queries
 if (window.matchMedia('(min-width: 37.5rem)').matches) {
@@ -57,20 +58,38 @@ function loadHtml(page) {
   xhr.send()
 }
 
-function buildTeamHtml(param) {
-  var req = new XMLHttpRequest()
-  var url = `https://jsonplaceholder.typicode.com/${param}`
-  req.open('GET', url, true)
-  req.send()
-  req.onload = function() {
-    if (req.status === 200 && req.readyState === 4) {
-      var response = JSON.parse(req.response)
+// Promise-based xhr
+var makeRequest = function(url) {
+  var req = new XMLHttpRequest
+
+  // wrap xhr in a Promise
+  return new Promise(function(resolve, reject) {
+    req.onload = function() {
+      if (req.status === 200 && req.readyState === 4) {
+        resolve(req)
+      } else {
+        reject({statusText: req.statusText})
+      }
+    }
+    req.open('GET', url, true)
+    req.send()
+  })
+}
+
+function buildTeamHtml() {
+  makeRequest('https://jsonplaceholder.typicode.com/photos')
+    .then(function(req) {  
+      photos = JSON.parse(req.response)
+      return makeRequest('https://jsonplaceholder.typicode.com/users')
+    }).then(function(req) {
+      users = JSON.parse(req.response)
+    }).then(function() {
       main.innerHTML = ''
       var div = createEl('div')
       div.classList.add('team')
       append(main, div)
 
-      response.forEach(function(person) {
+      users.forEach(function(person) {
         var ul = createEl('ul')
         var name = createEl('li')
         var email = createEl('li')
@@ -89,15 +108,12 @@ function buildTeamHtml(param) {
         append(ul, email)
         append(ul, motto)
         append(ul, phrase)
-      })
-    } else {
-      console.log('Error')
-    }
-  }
 
-  req.onerror = function(err) {
-    console.log(err)
-  }
+        randomPhoto()
+      })
+    }).catch(function(err) {
+      console.log('Error:', err)
+    })
 }
 
 function createEl(element) {
@@ -106,4 +122,22 @@ function createEl(element) {
 
 function append(parent, element) {
   return parent.appendChild(element)
+}
+
+// select random photo
+function randomPhoto() {
+  var index = Math.floor(Math.random() * users.length)
+  var ul = document.querySelectorAll('ul')
+  var photo = photos[index]
+
+  var img = createEl('img')
+  var li = createEl('li')
+
+  img.src = photo.thumbnailUrl
+  var img_li = append(li, img)
+
+  // insert img before other items in ul
+  ul.forEach(function(list) {
+    list.insertBefore(img_li, list.childNodes[0])
+  })
 }
