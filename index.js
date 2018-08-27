@@ -1,33 +1,26 @@
 var nav = document.getElementById('navbar')
 var pageHeader = nav.parentElement
+var menuIcon = document.querySelector('.icon-menu')
 var navOffset = nav.offsetTop
-var navToggle = document.getElementById('nav-toggle')
 var navLinks = Array.from(nav.children)
 var main = document.getElementById('main')
 var photos, users
 
-// .matchMedia to match css media queries
-if (window.matchMedia('(min-width: 37.5rem)').matches) {
-  window.onscroll = () => stickyNav()  
-}
+window.onscroll = () => stickyNav()  
 
 // nav collapse
-if (window.matchMedia('(max-width: 37.5rem)').matches) {
-  pageHeader.addEventListener('click', function(e) {
-    if (e.target.tagName === 'A' || e.target.tagName ==='IMG') {
-      nav.classList.toggle('show')    
-    }
-  })
-}
+menuIcon.addEventListener('click', function(e) {
+  nav.classList.toggle('show')
+})
 
 // sticky nav
 function stickyNav() {
   if (window.pageYOffset > navOffset) {
     nav.classList.add('nav-sticky')
-    pageHeader.style.marginBottom = '2rem'
+    // pageHeader.style.marginBottom = '2rem'
   } else {
     nav.classList.remove('nav-sticky')
-    pageHeader.style.marginBottom = '0'
+    // pageHeader.style.marginBottom = '0'
   }
 }
 
@@ -37,6 +30,7 @@ nav.addEventListener('click', function(e) {
     link.classList.remove('active')
   });
   e.target.classList.add('active')
+  nav.classList.remove('show')
 })
 
 // show home on first load
@@ -129,7 +123,6 @@ function randomPhoto() {
   var index = Math.floor(Math.random() * users.length)
   var ul = document.querySelectorAll('ul')
   var photo = photos[index]
-
   var img = createEl('img')
   var li = createEl('li')
 
