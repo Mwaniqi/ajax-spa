@@ -10,7 +10,7 @@ window.onscroll = () => stickyNav();
 
 // nav collapse
 menuIcon.addEventListener("click", function (e) {
-  nav.classList.toggle("show");
+  nav.classList.toggle("showNav");
 });
 
 // sticky nav
