@@ -3,18 +3,34 @@ const pageHeader = nav.parentElement;
 const menuIcon = document.querySelector(".icon-menu");
 const navOffset = nav.offsetTop;
 const navLinks = Array.from(nav.children);
-let main = document.getElementById("main");
+const main = document.getElementById("main");
+const cartBtn = document.querySelector(".cart-btn");
+const closeCartBtn = document.querySelector(".close-cart");
+const clearCartBtn = document.querySelector(".clear-cart");
+const cartDOM = document.querySelector(".cart");
+const cartOverlay = document.querySelector(".cart-overlay");
+const cartItems = document.querySelector(".cart-items");
+const cartTotal = document.querySelector(".cart-total");
+const cartContent = document.querySelector(".cart-content");
 let productsDOM;
 let teamPhotos, team;
+let cart = [];
 
 window.onscroll = () => stickyNav();
 
 let App = {
   init() {
     let products = new Products();
-    loadHtml("home").then(() => {
-      ui.displayProducts(products);
-    });
+    loadHtml("home")
+      .then(() => {
+        ui.displayProducts(products);
+      })
+      .then(() => {
+        ui.getBagBtns();
+      });
+  },
+  setup() {
+    closeCartBtn.addEventListener("click", () => ui.hideCart());
   },
 };
 
@@ -69,7 +85,7 @@ async function loadHtml(page) {
     let response = await result.text();
     main.innerHTML = response;
   } catch (error) {
-    console.error();
+    console.error(error);
   }
 }
 // function loadHtml(page) {
@@ -87,22 +103,22 @@ async function loadHtml(page) {
 // }
 
 // Promise-based xhr
-let makeRequest = function (url) {
-  let req = new XMLHttpRequest();
+// let makeRequest = function (url) {
+//   let req = new XMLHttpRequest();
 
-  // wrap xhr in a Promise
-  return new Promise(function (resolve, reject) {
-    req.onload = function () {
-      if (req.status === 200 && req.readyState === 4) {
-        resolve(req);
-      } else {
-        reject({ statusText: req.statusText });
-      }
-    };
-    req.open("GET", url, true);
-    req.send();
-  });
-};
+//   // wrap xhr in a Promise
+//   return new Promise(function (resolve, reject) {
+//     req.onload = function () {
+//       if (req.status === 200 && req.readyState === 4) {
+//         resolve(req);
+//       } else {
+//         reject({ statusText: req.statusText });
+//       }
+//     };
+//     req.open("GET", url, true);
+//     req.send();
+//   });
+// };
 
 let ui = {
   displayProducts(products) {
@@ -148,6 +164,74 @@ let ui = {
       div.innerHTML = list;
     });
   },
+  getBagBtns() {
+    const bagBtns = [...document.querySelectorAll(".bag-btn")];
+    bagBtns.forEach((button) => {
+      let id = button.dataset.id;
+      button.addEventListener("click", () => {
+        //check if item is already in cart
+        let itemInCart = cart.find((item) => item.id == id);
+        if (itemInCart) {
+          button.innerText = "added to cart";
+          button.disabled = true;
+        } else {
+          button.innerText = "added to cart";
+          button.disabled = true;
+          // get products in local storage
+          let cartItem = { ...Store.getProduct(id), amount: 1 };
+          // add item to cart array
+          cart = [...cart, cartItem];
+          // save updated cart to local storage
+          Store.saveCart(cart);
+          // calculate cart values
+          this.calculateCartValues(cart);
+          // add cart item to shopping cart
+          this.addCartItemToDom(cartItem);
+          // show the cart
+          this.showCart();
+        }
+      });
+    });
+  },
+  calculateCartValues(cart) {
+    let tempPrice = 0;
+    let itemsTotal = 0;
+    // cart.map((item) => {
+    //   itemsTotal += item.amount;
+    //   tempPrice += item.price * item.amount;
+    // });
+    for (const cartItem of cart) {
+      itemsTotal += cartItem.amount;
+      tempPrice += cartItem.price * cartItem.amount;
+    }
+    cartItems.innerText = itemsTotal;
+    cartTotal.innerText = parseFloat(tempPrice.toFixed(2));
+  },
+  addCartItemToDom(cartItem) {
+    const div = document.createElement("div");
+    div.classList.add("cart-item");
+    div.innerHTML = `
+      <img src=${cartItem.image} alt="product" />
+      <div>
+        <h4>${cartItem.name}</h4>
+        <h5>$${cartItem.price}</h5>
+        <span class="remove-item" data-id=${cartItem.id}>remove</span>
+      </div>
+      <div>
+        <i class="fas fa-chevron-up" data-id=${cartItem.id}></i>
+        <p class="item-amount">${cartItem.amount}</p>
+        <i class="fas fa-chevron-down" data-id=${cartItem.id}></i>
+      </div>`;
+    cartContent.appendChild(div);
+  },
+  showCart() {
+    cartOverlay.classList.add("transparent-bg");
+    cartDOM.classList.add("showCart");
+  },
+  hideCart() {
+    cartOverlay.classList.remove("transparent-bg");
+    cartDOM.classList.remove("showCart");
+  },
 };
 
 let Store = {
@@ -156,6 +240,13 @@ let Store = {
   },
   saveTeamData(teamData) {
     localStorage.setItem("teamData", JSON.stringify(teamData));
+  },
+  getProduct(id) {
+    let products = JSON.parse(localStorage.getItem("products"));
+    return products.find((product) => product.id == id);
+  },
+  saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
   },
 };
 
@@ -226,4 +317,5 @@ function randomPhotoUrl(data) {
 // show home on first load
 document.addEventListener("DOMContentLoaded", function () {
   App.init();
+  App.setup();
 });

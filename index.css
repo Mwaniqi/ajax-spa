@@ -141,7 +141,7 @@ nav a:hover,
 .showCart {
   transform: translateX(0);
 }
-.transparentBcg {
+.transparent-bg {
   visibility: visible;
 }
 .close-cart {
