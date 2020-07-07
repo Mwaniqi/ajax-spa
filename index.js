@@ -15,6 +15,7 @@ const cartContent = document.querySelector(".cart-content");
 let productsDOM;
 let teamPhotos, team;
 let cart = [];
+let bagButtonsDOM = [];
 
 window.onscroll = () => stickyNav();
 
@@ -27,9 +28,11 @@ let App = {
       })
       .then(() => {
         ui.getBagBtns();
+        ui.cartLogic();
       });
   },
   setup() {
+    cartBtn.addEventListener("click", () => ui.showCart());
     closeCartBtn.addEventListener("click", () => ui.hideCart());
   },
 };
@@ -67,7 +70,6 @@ nav.addEventListener("click", function (e) {
   }
   if (pageurl === "team") {
     let teamData = JSON.parse(localStorage.getItem("teamData"));
-    // getTeamData().then((teamData) => ui.displayTeam(teamData));
     if (JSON.parse(localStorage.getItem("teamData"))) {
       ui.displayTeam(teamData);
     } else {
@@ -131,8 +133,8 @@ let ui = {
           <div class="img-container">
             <img
               src=${product.image}
-              alt="product"
-              class="product-img"
+              alt="product-image"
+              class="product-img image-bg"
             />
             <button class="bag-btn" data-id=${product.id}>
               <i class="fa fa-shopping-cart">Add to cart</i>
@@ -166,6 +168,7 @@ let ui = {
   },
   getBagBtns() {
     const bagBtns = [...document.querySelectorAll(".bag-btn")];
+    bagButtonsDOM = bagBtns;
     bagBtns.forEach((button) => {
       let id = button.dataset.id;
       button.addEventListener("click", () => {
@@ -211,7 +214,7 @@ let ui = {
     const div = document.createElement("div");
     div.classList.add("cart-item");
     div.innerHTML = `
-      <img src=${cartItem.image} alt="product" />
+      <img src=${cartItem.image} alt="product" class="image-bg" />
       <div>
         <h4>${cartItem.name}</h4>
         <h5>$${cartItem.price}</h5>
@@ -231,6 +234,60 @@ let ui = {
   hideCart() {
     cartOverlay.classList.remove("transparent-bg");
     cartDOM.classList.remove("showCart");
+  },
+  cartLogic() {
+    clearCartBtn.addEventListener("click", () => this.clearCart());
+    cartContent.addEventListener("click", (e) => {
+      let target = e.target;
+      let id = target.dataset.id;
+      if (target.classList.contains("fa-chevron-up")) {
+        let itemToAdd = cart.find((item) => item.id == id);
+        itemToAdd.amount = itemToAdd.amount + 1;
+        // updated cart in local storage
+        Store.saveCart(cart);
+        // recalculate cart values
+        this.calculateCartValues(cart);
+        // update amount in cart
+        target.nextElementSibling.innerText = itemToAdd.amount;
+      } else if (target.classList.contains("fa-chevron-down")) {
+        let itemToReduce = cart.find((item) => item.id == id);
+        itemToReduce.amount = itemToReduce.amount - 1;
+        if (itemToReduce.amount > 0) {
+          // updated cart in local storage
+          Store.saveCart(cart);
+          // recalculate cart values
+          this.calculateCartValues(cart);
+          // update amount in cart
+          target.previousElementSibling.innerText = itemToReduce.amount;
+        } else {
+          // if item reduced to zero
+          this.removeItem(id);
+          //remove item from dom
+          cartContent.removeChild(target.parentElement.parentElement);
+        }
+      } else if (target.classList.contains("remove-item")) {
+        this.removeItem(id);
+        cartContent.removeChild(target.parentElement.parentElement);
+      }
+    });
+  },
+  removeItem(id) {
+    cart = cart.filter((item) => item.id !== id);
+    this.calculateCartValues(cart);
+    Store.saveCart(cart);
+    let button = bagButtonsDOM.find((button) => button.dataset.id == id);
+    button.disabled = false;
+    button.innerHTML = `<i class="fa fa-shopping-cart">add to cart</i>`;
+  },
+  clearCart() {
+    // get ids of all items in cart
+    let ids = cart.map((item) => item.id);
+    ids.forEach((id) => this.removeItem(id));
+    // update DOM
+    while (cartContent.children.length > 0) {
+      // remove every first child until there's no more
+      cartContent.removeChild(cartContent.children[0]);
+    }
   },
 };
 

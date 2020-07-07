@@ -5,6 +5,7 @@
   --mainRed: #ea5959;
   --mainSpacing: 0.1rem;
   --mainTransition: all 0.3s linear;
+  --boxShadow: 0 0 0.3rem 0.005rem #a0a0a0;
 }
 * {
   box-sizing: border-box;
@@ -70,11 +71,12 @@ nav a {
   margin: 0.25rem 0;
   text-align: center;
   transition: color 0.3s linear;
+  border-radius: 2px;
 }
 nav a:hover,
 .active {
-  color: #70cffe;
-  background-color: #202020;
+  color: var(--mainBlack);
+  background-color: var(--gray);
   transition: all 0.3s ease-in;
 }
 .nav-toggle {
@@ -88,15 +90,13 @@ nav a:hover,
   width: 20px;
   height: 15px;
 }
-/* .cart-icon {
-  font-size: 1.4rem;
-} */
 .cart-icon:hover {
   cursor: pointer;
 }
 .cart-btn {
   position: relative;
   margin-left: auto;
+  margin-right: 1rem;
 }
 .cart-items {
   background-color: #ea5959;
@@ -111,6 +111,10 @@ nav a:hover,
 .showNav {
   display: block;
   transition: all 0.5s ease-in-out;
+}
+.image-bg {
+  background: #e1d8d8;
+  border: 0;
 }
 /* --------------- Cart ---------------- */
 .cart-overlay {
@@ -280,9 +284,11 @@ main {
 /* --------------- Products ---------------- */
 
 .product {
-  background-color: #f0c06930;
+  background-color: #e1d8d8;
   padding-bottom: 1rem;
   line-height: 1.5;
+  box-shadow: var(--boxShadow);
+  color: #000;
 }
 .products {
   padding: 4rem 0;
@@ -315,6 +321,7 @@ main {
 }
 .bag-btn:hover {
   color: #fff;
+  background-color: var(--mainRed);
 }
 .fa-shopping-cart {
   margin-right: 0.5rem;
@@ -348,7 +355,7 @@ main {
 .product h4 {
   margin-top: 0.1rem;
   letter-spacing: var(--mainSpacing);
-  color: var(--primaryColor);
+  color: var(--mainRed);
   text-align: center;
   font-weight: 300;
   font-size: 0.9rem;
@@ -371,7 +378,7 @@ blockquote {
   width: 50px;
   height: 50px;
   background-color: #6b7585;
-  border-radius: 5px;
+  border-radius: 2px;
   float: left;
   margin: 0.4rem 0.5rem 0 0;
 }
@@ -388,7 +395,7 @@ team styles
 ***********************************/
 .team ul {
   background-color: #f0c06930;
-  box-shadow: 0 2px 8px 0 #a0a0a0;
+  box-shadow: var(--boxShadow);
   padding: 0.5rem 0.5rem 1rem 0.5rem;
   text-align: center;
 }
@@ -399,10 +406,12 @@ team styles
 }
 .team img {
   display: block;
-  box-shadow: 0 1px 5px 0 #202020;
+  box-shadow: 0 0 0.3rem 0.005rem var(--gray);
   width: 100px;
+  height: 100px;
   margin: 12px auto;
   border-radius: 50%;
+  border: 0;
 }
 .team li:nth-child(2) {
   font-family: Lato, sans-serif;
@@ -469,6 +478,9 @@ media queries
     width: 30vw;
     min-width: 450px;
   }
+  .cart-btn {
+    margin-left: 0;
+  }
   main {
     margin-top: 2rem;
     padding: 2rem 1rem;
@@ -478,9 +490,12 @@ media queries
     margin: 0 auto 2rem auto;
     display: flex;
   }
+  .products {
+    width: 100%;
+  }
   #testimonial {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     grid-template-rows: auto;
   }
   blockquote {
@@ -488,7 +503,7 @@ media queries
   }
   .team {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
     grid-column-gap: 1.25rem;
     grid-row-gap: 1.25rem;
   }
